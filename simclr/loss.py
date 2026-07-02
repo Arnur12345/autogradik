@@ -25,6 +25,8 @@ class NTXentLoss(nn.Module):
         z = nn.functional.normalize(torch.concat([z1, z2], dim=0))
         b, emb = z.shape
         S = (z * z.T) / self.temperature
+        
+        S.fill_diagonal_
 
         loss = 1/2 * (F.cross_entropy(S[:b//2, :], torch.arange(b//2, b)) + 
                       F.cross_entropy(S[b:, :], torch.arange(0, b//2)))
